@@ -1,4 +1,5 @@
 import * as esbuild from 'esbuild-wasm';
+import axios from 'axios';
  
 export const unpkgPathPlugin = () => {
   return {
@@ -7,8 +8,22 @@ export const unpkgPathPlugin = () => {
     // resolve - figuring out where index.js is stored  
     build.onResolve({ filter: /.*/ }, async (args: any) => { // filter regex allows to control when onResolve gets executed
         console.log('onResolve', args);
-        return { path: args.path, namespace: 'a' }; // overriding
+        // overriding
         // namespace is another filter that can be applied onLoad with 'filter' - by namespace
+        if (args.path === 'index.js') return { path: args.path, namespace: 'a' };
+        
+        // checking if a file has a relative path import:
+        if (args.path.includes('./') || args.path.includes('../')) {
+          return {
+            path: new URL(args.path, 'https://unpkg.com' + args.resolveDir + '/')?.href, // creating full URL for other imports inside the imported module
+            namespace: 'a'
+          }
+        }
+        
+        else return {
+            path: `https://unpkg.com/${args.path}`,
+            namespace: 'a'
+          }
       });
       
       // attempt to load the content of index.js from FS and overriding standard ESBuild behavior
@@ -20,16 +35,19 @@ export const unpkgPathPlugin = () => {
           return {
             loader: 'jsx',
             contents: `
-              import message from './message';
+              const message = require('nested-test-pkg');
               console.log(message);
             `,
           };
-        } else {
-          return {
-            loader: 'jsx',
-            contents: 'export default "hi there!"',
-          };
-        }
+        } 
+
+        const { data, request } = await axios.get(args.path);
+       
+        return {
+          loader: 'jsx',
+          contents: data,
+          resolveDir: new URL('./', request.responseURL).pathname // describes the path where we found the original file
+        };
       });
     },
   };
