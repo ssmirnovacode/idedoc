@@ -5,9 +5,11 @@ import { fetchPlugin } from './plugins/fetchPlugin';
 
 function App() {
 
+  const ref = useRef<any>()
+  const iframeRef = useRef<any>();
   const [ input, setInput] = useState('');
   const [ code, setCode ] = useState('');
-  const ref = useRef<any>()
+  
 
   useEffect(() => {
     startService();
@@ -33,8 +35,23 @@ function App() {
         global: 'window'
       }
     })
-    setCode(result?.outputFiles[0]?.text)
+    // setCode(result?.outputFiles[0]?.text)
+    iframeRef?.current?.contentWindow.postMessage(result?.outputFiles[0]?.text, '*');
   }
+
+  const html = `
+    <html>
+      <head></head>
+      <body>
+        <div id="root"></div>
+        <script>
+          window.addEventListener('message', event => {
+            eval(event.data)
+          }, false)
+        </script>
+      </body>
+    </html>
+  `
 
   return (
     <div >
@@ -43,6 +60,7 @@ function App() {
       <button onClick={handleClick}>Submit</button>
      </div>
      <pre>{code}</pre>
+     <iframe ref={iframeRef} sandbox="allow-scripts" title="display" srcDoc={html} />
     </div>
   );
 }
