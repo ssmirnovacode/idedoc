@@ -8,7 +8,6 @@ function App() {
   const ref = useRef<any>()
   const iframeRef = useRef<any>();
   const [ input, setInput] = useState('');
-  const [ code, setCode ] = useState('');
   
 
   useEffect(() => {
@@ -24,6 +23,10 @@ function App() {
 
   const handleClick = async () => {
     if (!ref.current) return;
+
+    // refreshing/resetting the iframe content:
+    iframeRef.current.srcdoc = html;
+
     //transpiling:
     const result = await ref.current.build({
       entryPoints: ['index.js'],
@@ -65,8 +68,7 @@ function App() {
      <div>
       <button onClick={handleClick}>Submit</button>
      </div>
-     <pre>{code}</pre>
-     <iframe ref={iframeRef} sandbox="allow-scripts" title="display" srcDoc={html} />
+     <iframe ref={iframeRef} sandbox="allow-scripts" title="preview-display" srcDoc={html} />
     </div>
   );
 }
