@@ -6,30 +6,29 @@ const fileCache = localForage.createInstance({
   name: 'filecache'
 });
 
-export const unpkgPathPlugin = () => {
+export const unpkgPathPlugin = (inputCode: string) => {
   return {
-    name: 'unpkg-path-plugin', // just for debugging
-    setup(build: esbuild.PluginBuild) { // build represents the entire bundling process
-    // resolve - figuring out where index.js is stored  
-    build.onResolve({ filter: /.*/ }, async (args: any) => { // filter regex allows to control when onResolve gets executed
-        console.log('onResolve', args);
-        // overriding
-        // namespace is another filter that can be applied onLoad with 'filter' - by namespace
-        if (args.path === 'index.js') return { path: args.path, namespace: 'a' };
-        
-        // checking if a file has a relative path import:
-        if (args.path.includes('./') || args.path.includes('../')) {
-          return {
-            path: new URL(args.path, 'https://unpkg.com' + args.resolveDir + '/')?.href, // creating full URL for other imports inside the imported module
-            namespace: 'a'
-          }
-        }
-        
-        else return {
-            path: `https://unpkg.com/${args.path}`,
-            namespace: 'a'
-          }
+    name: 'unpkg-path-plugin', 
+    setup(build: esbuild.PluginBuild) { 
+
+      // handle root entry file of index.js
+      build.onResolve({ filter: /(^index\.js$)/ }, () => {
+        return { path: 'index.js', namespace: 'a'}
       });
+
+      // handle relative paths in a module
+      build.onResolve({ filter: /^\.+\// }, async (args: any) => {
+        return { path: new URL(args.path, 'https://unpkg.com' + args.resolveDir + '/')?.href, namespace: 'a'}
+      });
+
+      build.onResolve({ filter: /.*/ }, async (args: any) => { // filter regex allows to control when onResolve gets executed       
+          
+      // handle main file of a module
+      return {
+              path: `https://unpkg.com/${args.path}`,
+              namespace: 'a'
+            }
+        });
       
       // attempt to load the content of index.js from FS and overriding standard ESBuild behavior
       build.onLoad({ filter: /.*/ }, async (args: any) => {
@@ -39,10 +38,7 @@ export const unpkgPathPlugin = () => {
         if (args.path === 'index.js') {
           return {
             loader: 'jsx',
-            contents: `
-              const message = require('react');
-              console.log(message);
-            `,
+            contents: inputCode,
           };
         } 
 
