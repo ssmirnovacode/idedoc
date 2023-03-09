@@ -15,3 +15,6 @@ As we fetch NPM packages for every import, there can be a lot of requests. To ha
 ## Instant code display
 We are using srcDoc attribute on iframe with resulting code, which allows us to display the resulting app instantly. However, some browser features like localStorage and cookies won't be available. They will probably be enabled in upcoming versions.
 We add a 'message' event listener to the iframe and issue postMessage everytime we submit code.
+
+## Code Editor
+We use Monaco-Editor wrapped into a React component. We enabled some nice features such as theme an prettier code formatter.
