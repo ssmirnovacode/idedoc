@@ -1,5 +1,9 @@
 # IDE Doc
 
+
+TODO:
+1. switch of language for text editor
+
 ## Dynamic npm-packages fetching
 Using a customised plugin for ESBuild that intercepts int onLoad event so that instead of looking for a package in file system it is fetched directly from NPM (unpkg.io, that gives us direct access to NPM content without CORS issues).
 
@@ -10,3 +14,4 @@ As we fetch NPM packages for every import, there can be a lot of requests. To ha
 
 ## Instant code display
 We are using srcDoc attribute on iframe with resulting code, which allows us to display the resulting app instantly. However, some browser features like localStorage and cookies won't be available. They will probably be enabled in upcoming versions.
+We add a 'message' event listener to the iframe and issue postMessage everytime we submit code.
