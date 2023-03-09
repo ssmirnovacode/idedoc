@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import MonacoEditor, { EditorDidMount } from '@monaco-editor/react';
 import prettier from 'prettier';
 import parser from 'prettier/parser-babel';
+import './code-editor.css';
 
 interface CodeEditorProps {
     initialValue: string;
@@ -21,7 +22,6 @@ const CodeEditor = ({ initialValue, onChange }: CodeEditorProps) => {
     }
 
     const onFormatClick = () => {
-        console.log(editorRef.current)
         const unformatted: string = editorRef?.current?.getModel().getValue();
         const formatted = prettier.format(unformatted, {
             parser: 'babel',
@@ -29,30 +29,33 @@ const CodeEditor = ({ initialValue, onChange }: CodeEditorProps) => {
             useTabs: false,
             semi: true,
             singleQuote: true
-        });
+        })
+        .replace(/\n$/, ''); // removing \n automatically injected by prettier
 
         editorRef.current.setValue(formatted);
     }
-    return <>
-        <button onClick={onFormatClick}>Format</button>
-        <MonacoEditor 
-            editorDidMount={onEditorDidMount}
-            value={initialValue} // initialValue
-            theme="dark" 
-            language="javascript" 
-            height="500px" 
-            options={{
-                wordWrap: 'on',
-                minimap: { enabled: false},
-                showUnused: false,
-                folding: false, 
-                lineNumbersMinChars: 3,
-                fontSize: 16,
-                scrollBeyondLastLine: false,
-                automaticLayout: true
-            }}
-        />;
-    </>
+    return (
+        <div className='editor-wrapper'>
+            <button className='button button-format is-primary is-small' onClick={onFormatClick}>Format</button>
+            <MonacoEditor 
+                editorDidMount={onEditorDidMount}
+                value={initialValue} // initialValue
+                theme="dark" 
+                language="javascript" 
+                height="500px" 
+                options={{
+                    wordWrap: 'on',
+                    minimap: { enabled: false},
+                    showUnused: false,
+                    folding: false, 
+                    lineNumbersMinChars: 3,
+                    fontSize: 16,
+                    scrollBeyondLastLine: false,
+                    automaticLayout: true
+                }}
+            />;
+        </div>
+    )
 };
 
 export default CodeEditor;
