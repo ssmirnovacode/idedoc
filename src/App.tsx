@@ -4,13 +4,14 @@ import { unpkgPathPlugin } from './plugins/unpkg-path-plugin';
 import { fetchPlugin } from './plugins/fetchPlugin';
 import CodeEditor from './components/code-editor';
 import 'bulmaswatch/superhero/bulmaswatch.min.css';
+import Preview from './components/Rreview';
 
 function App() {
 
   const ref = useRef<any>()
-  const iframeRef = useRef<any>();
-  const [ input, setInput] = useState('');
   
+  const [ input, setInput] = useState('');
+  const [ code, setCode ] = useState('')
 
   useEffect(() => {
     startService();
@@ -25,9 +26,7 @@ function App() {
 
   const handleClick = async () => {
     if (!ref.current) return;
-
-    // refreshing/resetting the iframe content:
-    iframeRef.current.srcdoc = html;
+    
 
     //transpiling:
     const result = await ref.current.build({
@@ -40,38 +39,16 @@ function App() {
         global: 'window'
       }
     })
-    // setCode(result?.outputFiles[0]?.text)
-    iframeRef?.current?.contentWindow.postMessage(result?.outputFiles[0]?.text, '*');
+    setCode(result.outputFiles[0].text)
   }
-
-  const html = `
-    <html>
-      <head></head>
-      <body>
-        <div id="root"></div>
-        <script>
-          window.addEventListener('message', event => {
-            try {
-              eval(event.data)
-            } catch (err) {
-              const root = document.querySelector('#root');
-              root.innerHTML = '<div style="color: red;"><h4>Runtime error: </h4>' + err + '</div>';
-              console.error(err);
-            }
-          }, false)
-        </script>
-      </body>
-    </html>
-  `
 
   return (
     <div >
       <CodeEditor initialValue={"const a = 1;"} onChange={value => setInput(value)} />
-     <textarea onChange={e => setInput(e.target.value)} value={input}></textarea>
      <div>
       <button onClick={handleClick}>Submit</button>
      </div>
-     <iframe ref={iframeRef} sandbox="allow-scripts" title="preview-display" srcDoc={html} />
+     <Preview code={code} />
     </div>
   );
 }

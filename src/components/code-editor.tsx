@@ -53,7 +53,7 @@ const CodeEditor = ({ initialValue, onChange }: CodeEditorProps) => {
                     scrollBeyondLastLine: false,
                     automaticLayout: true
                 }}
-            />;
+            />
         </div>
     )
 };
