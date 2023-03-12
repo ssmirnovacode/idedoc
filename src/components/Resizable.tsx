@@ -12,6 +12,7 @@ const Resizable = (props: ResizableProps) => {
 
     const [ innerHeight, setInnerHeight ] = useState(window.innerHeight);
     const [ innerWidth, setInnerWidth ] = useState(window.innerWidth);
+    const [ width, setWidth ] = useState(window.innerWidth * 0.75)
 
     useEffect(() => {
         let timer: any;
@@ -19,7 +20,10 @@ const Resizable = (props: ResizableProps) => {
             if (timer) clearTimeout(timer); 
             timer = setTimeout(() => { // debouncing
                 setInnerHeight(window.innerHeight);
-                setInnerWidth(window.innerWidth)
+                setInnerWidth(window.innerWidth);
+                if (window.innerWidth * 0.75 < width) {
+                    setWidth(window.innerWidth * 0.75)
+                }
             }, 100)
             
         }
@@ -46,7 +50,11 @@ const Resizable = (props: ResizableProps) => {
             minConstraints: [innerWidth * 0.2, Infinity],
             maxConstraints:[innerWidth * 0.75, Infinity], 
             height: Infinity,
-            width: innerWidth * 0.75
+            width,
+            // to avoid the code editor window jump back to original size after resizing:
+            onResizeStop: (event, data) => {
+                setWidth(data.size.width)
+            }
         }
     }
 
