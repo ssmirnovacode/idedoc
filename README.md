@@ -3,6 +3,7 @@
 
 TODO:
 1. switch of language for text editor
+2. JSX syntax highlighting
 
 ## Dynamic npm-packages fetching
 Using a customised plugin for ESBuild that intercepts int onLoad event so that instead of looking for a package in file system it is fetched directly from NPM (unpkg.io, that gives us direct access to NPM content without CORS issues).
@@ -18,3 +19,6 @@ We add a 'message' event listener to the iframe and issue postMessage everytime 
 
 ## Code Editor
 We use Monaco-Editor wrapped into a React component. We enabled some nice features such as theme an prettier code formatter.
+
+## Resizable windows
+Using react-resizable library.

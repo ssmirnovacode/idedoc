@@ -1,7 +1,8 @@
 import React, {useState } from 'react';
 import bundle from '../bundler';
 import CodeEditor from './code-editor';
-import Preview from './Rreview';
+import Resizable from './Resizable';
+import Preview from './Preview';
 
 // a unit of multiple code editor windows
 const CodeCell = () => {
@@ -15,13 +16,13 @@ const CodeCell = () => {
   }
 
   return (
-    <div >
-      <CodeEditor initialValue={"const a = 1;"} onChange={value => setInput(value)} />
-     <div>
-      <button onClick={handleClick}>Submit</button>
-     </div>
-     <Preview code={code} />
-    </div>
+    <Resizable direction="vertical">
+      <div style={{ height: '100%', display: 'flex', flexDirection: 'row'}} >
+        <CodeEditor initialValue={"const a = 1;"} onChange={value => setInput(value)} />
+      
+      <Preview code={code} />
+      </div>
+    </Resizable>
   );
 }
 
