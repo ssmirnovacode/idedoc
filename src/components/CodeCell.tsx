@@ -1,4 +1,4 @@
-import React, {useState } from 'react';
+import React, {useEffect, useState } from 'react';
 import bundle from '../bundler';
 import CodeEditor from './code-editor';
 import Resizable from './Resizable';
@@ -8,12 +8,16 @@ import Preview from './Preview';
 const CodeCell = () => {
   
   const [ input, setInput] = useState('');
-  const [ code, setCode ] = useState('')
+  const [ code, setCode ] = useState('');
 
-  const handleClick = async () => {
-    const output = await bundle(input);
-    setCode(output);
-  }
+// auto-bundling once user stops typing for 1 sec and rendering the result in Preview
+  useEffect(() => {
+    const timer = setTimeout(async() => {
+      const output = await bundle(input);
+      setCode(output)
+    }, 1000)
+    return () => clearTimeout(timer)
+  }, [input]);
 
   return (
     <Resizable direction="vertical">

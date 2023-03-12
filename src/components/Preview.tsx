@@ -31,7 +31,11 @@ const Preview = (props: PreviewProps) => {
 
     useEffect(() => {
         iframeRef.current.srcdoc = html;
-        iframeRef?.current?.contentWindow.postMessage(props.code, '*');
+        // Making sure the message gets sent with new data, not previous:
+        setTimeout(() => {
+          iframeRef?.current?.contentWindow.postMessage(props.code, '*');
+        }, 50)
+
     }, [props.code])
 
     return <div className="iframe-wrapper">
