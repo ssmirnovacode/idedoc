@@ -12,7 +12,8 @@ const bundle = async (rawCode: string) => {
           })
     }
 
-    const result = await service.build({
+    try {
+      const result = await service.build({
         entryPoints: ['index.js'],
         bundle: true,
         write: false,
@@ -23,7 +24,22 @@ const bundle = async (rawCode: string) => {
         }
       })
 
-    return result?.outputFiles[0]?.text
+      // we convert the return value into an object to be able to differentiate if result string is code or an error message
+      return {
+        code: result?.outputFiles[0]?.text,
+        err: ''
+      };
+    } catch (err) {
+      if (err instanceof Error) {
+        debugger
+        return {
+          code: "",
+          err: err.message,
+        };
+      } else {
+        throw err;
+      }
+    }
 }
 
 export default bundle

@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import './Preview.css'
 interface PreviewProps {
     code: string;
+    err: string;
 }
 
 const html = `
@@ -12,13 +13,20 @@ const html = `
       <body>
         <div id="root"></div>
         <script>
+          const handleError = err => {
+            const root = document.querySelector('#root');
+            root.innerHTML = '<div style="color: red;"><h4>Runtime error: </h4>' + err + '</div>';
+            console.error(err);
+          };
+          window.addEventListener('error', (event) => {
+            event.preventDefault();
+            handleError(event?.error);
+          }); 
           window.addEventListener('message', event => {
             try {
               eval(event.data)
             } catch (err) {
-              const root = document.querySelector('#root');
-              root.innerHTML = '<div style="color: red;"><h4>Runtime error: </h4>' + err + '</div>';
-              console.error(err);
+              handleError(err);
             }
           }, false)
         </script>
@@ -38,13 +46,15 @@ const Preview = (props: PreviewProps) => {
 
     }, [props.code])
 
-    return <div className="iframe-wrapper">
+    return <div className="preview-wrapper">
               <iframe 
               ref={iframeRef} 
               sandbox="allow-scripts" 
               title="preview-display" 
               srcDoc={html} />
-            </div>
+            
+      { props.err && <div className="preview-error">{props.err}</div>}
+    </div>
 }
 
 export default Preview
