@@ -20,5 +20,8 @@ We add a 'message' event listener to the iframe and issue postMessage everytime 
 ## Code Editor
 We use Monaco-Editor wrapped into a React component. We enabled some nice features such as theme an prettier code formatter.
 
+## Markdown Editor
+Created with uie/react-md-editor
+
 ## Resizable windows
 Using react-resizable library.
