@@ -6,7 +6,7 @@ const TextEditor = () => {
 
     const editorRef = useRef<HTMLDivElement | null>(null);
     const [ editing, setEditing ] = useState(false);
-    const [ value, setValue ] = useState('')
+    const [ value, setValue ] = useState('Example')
 
     useEffect(() => {
         const clickHandler = (event: MouseEvent) => {
@@ -18,17 +18,19 @@ const TextEditor = () => {
     }, [])
 
     if (editing) {
-        return  <div ref={editorRef}>
+        return  <div className="text-editor" ref={editorRef}>
                     <MDEditor 
                     value={value} 
-                    onChange={(value?: string) => setValue(value || '')} 
+                    onChange={(value) => setValue(value || '')} 
                     />
                 </div>
     }
 
     return(
-        <div onClick={() => setEditing(true)}>
-            <MDEditor.Markdown source={'# HEader'} style={{ whiteSpace: 'pre-wrap' }} />
+        <div className="text-editor card" onClick={() => setEditing(true)}>
+            
+                <MDEditor.Markdown source={value} style={{ whiteSpace: 'pre-wrap' }} />
+            
         </div>
     )
 };
