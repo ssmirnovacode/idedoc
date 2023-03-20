@@ -5,37 +5,37 @@ import reducers from "./reducers";
 
 export const store = createStore(reducers, {}, applyMiddleware(thunk));
 
-// store.dispatch({
-//     type: ActionType.INSERT_CELL_BEFORE,
-//     payload: {
-//         id: '',
-//         type: 'code'
-//     }
-// })
+store.dispatch({
+    type: ActionType.INSERT_CELL_BEFORE,
+    payload: {
+        id: '',
+        type: 'code'
+    }
+})
 
-// store.dispatch({
-//     type: ActionType.INSERT_CELL_BEFORE,
-//     payload: {
-//         id: '',
-//         type: 'text'
-//     }
-// })
+store.dispatch({
+    type: ActionType.INSERT_CELL_BEFORE,
+    payload: {
+        id: '',
+        type: 'text'
+    }
+})
 
-// store.dispatch({
-//     type: ActionType.INSERT_CELL_BEFORE,
-//     payload: {
-//         id: '',
-//         type: 'text'
-//     }
-// })
+store.dispatch({
+    type: ActionType.INSERT_CELL_BEFORE,
+    payload: {
+        id: '',
+        type: 'code'
+    }
+})
 
-// store.dispatch({
-//     type: ActionType.INSERT_CELL_BEFORE,
-//     payload: {
-//         id: '',
-//         type: 'text'
-//     }
-// })
+store.dispatch({
+    type: ActionType.INSERT_CELL_BEFORE,
+    payload: {
+        id: '',
+        type: 'text'
+    }
+})
 
 // console.log('created ---->', store.getState())
 

@@ -43,7 +43,6 @@ const reducer = (state: CellsState = initialState, action: Action): CellsState =
             };
         case ActionType.MOVE_CELL:
             if ((xIndex === 0 && action.payload.direction === 'up') ||( xIndex === state.order.length-1 && action.payload.direction === 'down')) return state;
-            const newIndex = action.payload.direction === 'up' ? xIndex - 1 : xIndex + 1; 
             return {
                 ...state,
                 order: action.payload.direction === 'up' ? 
