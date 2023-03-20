@@ -19,6 +19,7 @@ const initialState: CellsState = {
 }
 
 const reducer = (state: CellsState = initialState, action: Action): CellsState => {
+    const xIndex = state.order.findIndex(item => item === action.payload.id);
     switch(action.type) {
         case ActionType.UPDATE_CELL:
             const { id, content } = action?.payload || {};
@@ -30,11 +31,39 @@ const reducer = (state: CellsState = initialState, action: Action): CellsState =
                 }}
             };
         case ActionType.DELETE_CELL:
-            return state;
+            
+            const updatedData = { ...state.data};
+            delete updatedData[action.payload.id];
+            return {
+                ...state,
+                order: [ ...state.order.slice(0, xIndex), ...state.order.slice(xIndex+1)],
+                data: {
+                    ...updatedData
+                }
+            };
         case ActionType.MOVE_CELL:
-            return state;
+            if ((xIndex === 0 && action.payload.direction === 'up') ||( xIndex === state.order.length-1 && action.payload.direction === 'down')) return state;
+            const newIndex = action.payload.direction === 'up' ? xIndex - 1 : xIndex + 1; 
+            return {
+                ...state,
+                order: action.payload.direction === 'up' ? 
+                                [ ...state.order.slice(0, xIndex - 1), action.payload.id, state.order[xIndex],  ...state.order.slice(xIndex+1)] :
+                                [ ...state.order.slice(0, xIndex), state.order[xIndex+1], action.payload.id, ...state.order.slice(xIndex+2)]
+            };
         case ActionType.INSERT_CELL_BEFORE:
-            return state;
+            const newId = Math.random().toString();
+            return {
+                ...state,
+                order: [ ...state.order.slice(0,xIndex-1), newId, state.order[xIndex], ...state.order.slice(xIndex+1) ],
+                data: {
+                    ...state.data,
+                    [newId]: {
+                        id: newId,
+                        type: action.payload.type,
+                        content: ''
+                    }
+                }
+            };
         default:
             return state;
     }
