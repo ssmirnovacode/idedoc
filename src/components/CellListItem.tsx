@@ -12,9 +12,9 @@ const CellListItem = (props: CellListItemProps) => {
 
     return(
         <div>
-            <ActionBar id={props.cell.id} />
+            <ActionBar id={props.cell?.id} />
             {
-            props.cell.type === 'code' ?
+            props.cell?.type === 'code' ?
             <CodeCell cell={props.cell} /> :
              <TextEditor cell={props.cell} />
         }

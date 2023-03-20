@@ -51,9 +51,24 @@ const reducer = (state: CellsState = initialState, action: Action): CellsState =
             };
         case ActionType.INSERT_CELL_BEFORE:
             const newId = Math.random().toString();
-            return {
+            // first cell or added to the end
+            if (!action.payload.id) {
+                return {
                     ...state,
                     order: [ ...state.order, newId ],
+                    data: {
+                        ...state.data,
+                        [newId]: {
+                            id: newId,
+                            type: action.payload.type,
+                            content: ''
+                        }
+                    }
+                }
+            }
+            return {
+                    ...state,
+                    order: [ ...state.order.slice(0, xIndex), newId, state.order[xIndex], ...state.order.slice(xIndex+1) ],
                     data: {
                         ...state.data,
                         [newId]: {

@@ -16,26 +16,26 @@ store.dispatch({
 store.dispatch({
     type: ActionType.INSERT_CELL_BEFORE,
     payload: {
-        id: '',
+        id: store.getState().cells.order[0],
         type: 'text'
     }
 })
 
-store.dispatch({
-    type: ActionType.INSERT_CELL_BEFORE,
-    payload: {
-        id: '',
-        type: 'code'
-    }
-})
+// store.dispatch({
+//     type: ActionType.INSERT_CELL_BEFORE,
+//     payload: {
+//         id: '',
+//         type: 'code'
+//     }
+// })
 
-store.dispatch({
-    type: ActionType.INSERT_CELL_BEFORE,
-    payload: {
-        id: '',
-        type: 'text'
-    }
-})
+// store.dispatch({
+//     type: ActionType.INSERT_CELL_BEFORE,
+//     payload: {
+//         id: '',
+//         type: 'text'
+//     }
+// })
 
 // console.log('created ---->', store.getState())
 
