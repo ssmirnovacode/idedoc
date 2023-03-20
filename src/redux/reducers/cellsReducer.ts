@@ -47,22 +47,22 @@ const reducer = (state: CellsState = initialState, action: Action): CellsState =
             return {
                 ...state,
                 order: action.payload.direction === 'up' ? 
-                                [ ...state.order.slice(0, xIndex - 1), action.payload.id, state.order[xIndex],  ...state.order.slice(xIndex+1)] :
+                                [ ...state.order.slice(0, xIndex - 1), action.payload.id, state.order[xIndex - 1],  ...state.order.slice(xIndex+1)] :
                                 [ ...state.order.slice(0, xIndex), state.order[xIndex+1], action.payload.id, ...state.order.slice(xIndex+2)]
             };
         case ActionType.INSERT_CELL_BEFORE:
             const newId = Math.random().toString();
             return {
-                ...state,
-                order: [ ...state.order.slice(0,xIndex-1), newId, state.order[xIndex], ...state.order.slice(xIndex+1) ],
-                data: {
-                    ...state.data,
-                    [newId]: {
-                        id: newId,
-                        type: action.payload.type,
-                        content: ''
+                    ...state,
+                    order: [ ...state.order, newId ],
+                    data: {
+                        ...state.data,
+                        [newId]: {
+                            id: newId,
+                            type: action.payload.type,
+                            content: ''
+                        }
                     }
-                }
             };
         default:
             return state;
