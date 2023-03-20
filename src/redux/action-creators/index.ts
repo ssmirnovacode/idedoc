@@ -40,3 +40,5 @@ export const insertCellBefore = (id: string, cellType: CellTypes): InertCellBefo
         }
     }
 };
+
+export const actionCreators = { updateCell, deleteCell, moveCell, insertCellBefore}
