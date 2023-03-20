@@ -1,4 +1,5 @@
 import { Cell } from "../redux";
+import ActionBar from "./ActionBar";
 import CodeCell from "./CodeCell";
 import TextEditor from "./TextEditor";
 
@@ -11,6 +12,7 @@ const CellListItem = (props: CellListItemProps) => {
 
     return(
         <div>
+            <ActionBar id={props.cell.id} />
             {
             props.cell.type === 'code' ?
             <CodeCell cell={props.cell} /> :

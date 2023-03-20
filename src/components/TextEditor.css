@@ -25,3 +25,11 @@
     position: relative;
     
 }
+
+.text-editor {
+    padding: 2rem 1rem;
+}
+
+.text-editor p {
+    background-color: #1d2a38;
+}
