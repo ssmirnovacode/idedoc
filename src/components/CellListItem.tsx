@@ -13,7 +13,8 @@ const CellListItem = (props: CellListItemProps) => {
         <div>
             {
             props.cell.type === 'code' ?
-            <CodeCell /> : <TextEditor />
+            <CodeCell cell={props.cell} /> :
+             <TextEditor cell={props.cell} />
         }
             </div>
     )
