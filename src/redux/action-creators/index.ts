@@ -64,4 +64,4 @@ export const createBundle = (cellId: string, input: string) => {
     }
 }
 
-export const actionCreators = { updateCell, deleteCell, moveCell, insertCellBefore}
+export const actionCreators = { updateCell, deleteCell, moveCell, insertCellBefore, createBundle}

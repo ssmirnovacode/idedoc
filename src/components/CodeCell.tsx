@@ -1,10 +1,10 @@
-import React, {useEffect, useState } from 'react';
-import bundle from '../bundler';
+import React, {useEffect} from 'react';
 import CodeEditor from './code-editor';
 import Resizable from './Resizable';
 import Preview from './Preview';
 import { Cell } from '../redux';
 import { useActions } from '../hooks/useActions';
+import { useTypedSelector } from '../hooks/useTypedSelector';
 
 interface CodeCellProps {
   cell: Cell
@@ -13,21 +13,17 @@ interface CodeCellProps {
 // a unit of multiple code editor windows
 const CodeCell = (props: CodeCellProps) => {
   const { content, id } = props.cell;
-  
-  const [ code, setCode ] = useState('');
-  const [ error, setError ] = useState('')
 
-  const { updateCell } = useActions();
+  const { updateCell, createBundle } = useActions();
+  const bundle = useTypedSelector(({ bundle }) => bundle[id]);
 
 // auto-bundling once user stops typing for 1 sec and rendering the result in Preview
   useEffect(() => {
     const timer = setTimeout(async() => {
-      const output = await bundle(content);
-      setCode(output?.code);
-      setError(output?.err);
+      createBundle(id, content)
     }, 1000)
     return () => clearTimeout(timer)
-  }, [content]);
+  }, [id, content]);
 
   return (
     <Resizable direction="vertical">
@@ -35,7 +31,7 @@ const CodeCell = (props: CodeCellProps) => {
         <Resizable direction="horizontal">
           <CodeEditor initialValue={content} onChange={value => updateCell(id, value)} />
         </Resizable>
-      <Preview code={code} err={error} />
+      { bundle && <Preview code={bundle.code} err={bundle.err} />}
       </div>
     </Resizable>
   );

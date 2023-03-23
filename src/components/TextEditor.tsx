@@ -10,7 +10,6 @@ interface TextEditorProps {
 
 const TextEditor = (props: TextEditorProps) => {
     const { content, id } = props.cell || {};
-    console.log(props.cell)
 
     const editorRef = useRef<HTMLDivElement | null>(null);
     const [ editing, setEditing ] = useState(false);
