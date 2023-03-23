@@ -28,3 +28,6 @@ Using react-resizable library.
 ## Cumulative code
 
 All code cells are connected, we don't have to re-import or re-define previously defined variables.
+
+## show() helper function
+Allowing to quickly view the argument passed to it in Preview window. Built-in JSX syntax support (React and ReactDOM imported behind the scenes by default)

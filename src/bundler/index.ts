@@ -21,7 +21,9 @@ const bundle = async (rawCode: string) => {
         define: {
           'process.env.NODE_ENV': '"production"',
           global: 'window'
-        }
+        },
+        jsxFactory: '_React.createElement',
+        jsxFragment: '_React.Fragment'
       })
 
       // we convert the return value into an object to be able to differentiate if result string is code or an error message
