@@ -22,8 +22,9 @@ const CodeCell = (props: CodeCellProps) => {
     const timer = setTimeout(async() => {
       createBundle(id, content)
     }, 1000)
+    console.log('ban')
     return () => clearTimeout(timer)
-  }, [id, content]);
+  }, [id, content, createBundle]);
 
   return (
     <Resizable direction="vertical">
