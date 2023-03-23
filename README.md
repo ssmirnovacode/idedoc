@@ -1,6 +1,5 @@
 # IDE Doc
 
-
 TODO:
 1. switch of language for text editor
 2. JSX syntax highlighting
@@ -25,3 +24,7 @@ Created with uie/react-md-editor
 
 ## Resizable windows
 Using react-resizable library.
+
+## Cumulative code
+
+All code cells are connected, we don't have to re-import or re-define previously defined variables.

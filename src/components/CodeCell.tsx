@@ -17,18 +17,33 @@ const CodeCell = (props: CodeCellProps) => {
 
   const { updateCell, createBundle } = useActions();
   const bundle = useTypedSelector(({ bundle }) => bundle[id]);
+  const cumulativeCode = useTypedSelector(state => {
+    const { data, order } = state.cells;
+    const orderedCells = order.map(id => data[id]);
+
+    const cumulativeCode = [];
+    for (let c of orderedCells) {
+      if(c.type === 'code') {
+        cumulativeCode.push(c.content)
+      }
+      if (c.id === id) { // making sure only previous code cells are taken into account
+        break
+      }
+    }
+    return cumulativeCode;
+  })
 
 // auto-bundling once user stops typing for 1 sec and rendering the result in Preview
   useEffect(() => {
     if (!bundle) {
-      createBundle(id, content);
+      createBundle(id, cumulativeCode.join('\n'));
       return
     }
     const timer = setTimeout(async() => {
-      createBundle(id, content)
+      createBundle(id, cumulativeCode.join('\n'))
     }, 1000)
     return () => clearTimeout(timer)
-  }, [id, content, createBundle]);
+  }, [id, cumulativeCode.join('\n'), createBundle]);
 
   return (
     <Resizable direction="vertical">
