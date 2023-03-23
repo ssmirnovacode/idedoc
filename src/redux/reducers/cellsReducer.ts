@@ -1,5 +1,5 @@
 import { ActionType } from "../action-types"; 
-import { Action } from "../actions";
+import { Action, DeleteCellAction, InertCellBeforeAction, MoveCellAction, UpdateCellAction } from "../actions";
 import { Cell } from "../cell";
 
 interface CellsState {
@@ -18,7 +18,7 @@ const initialState: CellsState = {
     data: {}
 }
 
-const reducer = (state: CellsState = initialState, action: Action): CellsState => {
+const reducer = (state: CellsState = initialState, action: MoveCellAction | DeleteCellAction | InertCellBeforeAction | UpdateCellAction): CellsState => {
     const xIndex = state.order.findIndex(item => item === action.payload.id);
     switch(action.type) {
         case ActionType.UPDATE_CELL:
