@@ -6,6 +6,7 @@ import { Cell } from '../redux';
 import { useActions } from '../hooks/useActions';
 import { useTypedSelector } from '../hooks/useTypedSelector';
 import './CodeCell.css'
+import { useCumulativeCode } from '../hooks/useCumulativeCode';
 
 interface CodeCellProps {
   cell: Cell
@@ -17,50 +18,20 @@ const CodeCell = (props: CodeCellProps) => {
 
   const { updateCell, createBundle } = useActions();
   const bundle = useTypedSelector(({ bundle }) => bundle[id]);
-  const cumulativeCode = useTypedSelector(state => {
-    const { data, order } = state.cells;
-    const orderedCells = order.map(id => data[id]);
-
-    const showFunc = `
-    import _React from 'react';
-    import _ReactDOM from 'react-dom';
-      var show = (value) => {
-        const root = document.querySelector("#root");
-        if (typeof value === 'object') {
-          if (value.$$typeof && value.props) {
-            _ReactDOM.render(value, root);
-          }
-          else root.innerHTML = JSON.stringify(value);
-        }
-        else root.innerHTML = value;
-      };
-    `
-    const showFuncNoop = 'var show = () => {}'; // to be executed in Preview of following empty code cells
-
-    const cumulativeCode = [];
-    for (let c of orderedCells) {
-      if(c.type === 'code') {
-        c.id === id ?  cumulativeCode.push(showFunc) : cumulativeCode.push(showFuncNoop)
-        cumulativeCode.push(c.content)
-      }
-      if (c.id === id) { // making sure only previous code cells are taken into account
-        break
-      }
-    }
-    return cumulativeCode;
-  })
+  
+  const cumulativeCode = useCumulativeCode(id);
 
 // auto-bundling once user stops typing for 1 sec and rendering the result in Preview
   useEffect(() => {
     if (!bundle) {
-      createBundle(id, cumulativeCode.join('\n'));
+      createBundle(id, cumulativeCode);
       return
     }
     const timer = setTimeout(async() => {
-      createBundle(id, cumulativeCode.join('\n'))
+      createBundle(id, cumulativeCode)
     }, 1000)
     return () => clearTimeout(timer)
-  }, [id, cumulativeCode.join('\n'), createBundle]);
+  }, [id, cumulativeCode, createBundle]);
 
   return (
     <Resizable direction="vertical">
