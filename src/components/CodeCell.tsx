@@ -33,10 +33,27 @@ const CodeCell = (props: CodeCellProps) => {
     return () => clearTimeout(timer)
   }, [id, cumulativeCode, createBundle]);
 
+  const saveCodeHandler = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/', {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        method: 'POST',
+        body: JSON.stringify({bundle: bundle?.code})
+      })
+      const res = await response.json();
+      console.log(res)
+    } catch(err: any) {
+      console.error(err?.message)
+    }
+  }
+
   return (
     <Resizable direction="vertical">
       <div style={{ height: '100%', display: 'flex', flexDirection: 'row'}} >
         <Resizable direction="horizontal">
+          <button onClick={saveCodeHandler}>SAVE</button>
           <CodeEditor initialValue={content} onChange={value => updateCell(id, value)} />
         </Resizable>
         <div className='progress-wrapper'>

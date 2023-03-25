@@ -1,4 +1,4 @@
-import { RequestHandler, Router } from "express";
+import { NextFunction, RequestHandler, Response, Router } from "express";
 
 const express = require('express');
 const fs = require('fs')
@@ -6,6 +6,13 @@ const fs = require('fs')
 const app = express();
 
 app.use(express.json())
+
+app.use((req: Request,res: Response,next: NextFunction) => {
+    res.setHeader('Access-Control-Allow-Origin', '*'); // http://localhost:3000 || https://ssmirnovacode.github.io
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+});
 
 const router = Router();
 const saveHandler: RequestHandler = (req,res) => {
