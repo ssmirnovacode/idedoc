@@ -1,5 +1,7 @@
 # IDE Doc
 
+Browser-based code and documentation editor.
+
 TODO:
 1. switch of language for text editor
 2. JSX syntax highlighting
