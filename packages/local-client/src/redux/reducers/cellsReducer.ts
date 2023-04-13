@@ -28,6 +28,8 @@ const reducer = (state: CellsState = initialState, action: Action): CellsState =
       ? state.order.findIndex((item) => item === action.payload.id)
       : NaN;
   switch (action.type) {
+    case ActionType.SAVE_CELLS_ERROR:
+      return { ...state, error: action.payload };
     case ActionType.FETCH_CELLS:
       return { ...state, loading: true, error: null };
     case ActionType.FETCH_CELLS_COMPLETE: {

@@ -10,6 +10,7 @@ import {
   Direction,
 } from '../actions';
 import { Cell, CellTypes } from '../cell';
+import { RootState } from '../reducers';
 
 export const updateCell = (id: string, content: string): UpdateCellAction => {
   return {
@@ -90,6 +91,32 @@ export const fetchCells = () => {
   };
 };
 
+export const saveCells = () => {
+  return async (dispatch: Dispatch<Action>, getState: () => RootState) => {
+    const {
+      cells: { data, order },
+    } = getState();
+    const cells = order.map((id) => data[id]);
+
+    try {
+      await fetch('/cells', {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        method: 'POST',
+        body: JSON.stringify({ cells }),
+      });
+    } catch (err) {
+      if (err instanceof Error) {
+        dispatch({
+          type: ActionType.SAVE_CELLS_ERROR,
+          payload: err.message,
+        });
+      }
+    }
+  };
+};
+
 export const actionCreators = {
   updateCell,
   deleteCell,
@@ -97,12 +124,3 @@ export const actionCreators = {
   insertCellBefore,
   createBundle,
 };
-
-// } catch (err) {
-//     if (err instanceof Error) {
-//       dispatch({
-//         type: ActionType.SAVE_CELLS_ERROR,
-//         payload: err.message,
-//       });
-//     }
-//   }
