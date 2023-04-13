@@ -6,16 +6,12 @@ import './CellList.css';
 import { useActions } from '../hooks/useActions';
 
 const CellList = () => {
-  const { fetchCells, saveCells } = useActions();
+  const { fetchCells } = useActions();
   const cells = useTypedSelector(({ cells: { order, data } }) => order.map((id) => data[id]));
 
   useEffect(() => {
     fetchCells();
   }, []);
-
-  useEffect(() => {
-    saveCells();
-  }, [JSON.stringify(cells)]);
 
   const renderedCells = cells.map((cell) => {
     return (
