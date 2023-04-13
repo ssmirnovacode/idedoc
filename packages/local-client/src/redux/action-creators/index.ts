@@ -123,4 +123,6 @@ export const actionCreators = {
   moveCell,
   insertCellBefore,
   createBundle,
+  fetchCells,
+  saveCells,
 };
