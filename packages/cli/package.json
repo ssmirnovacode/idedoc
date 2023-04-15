@@ -1,6 +1,6 @@
 {
   "name": "idedoc",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "bin": "dist/index.js",
   "publishConfig": {
@@ -20,7 +20,7 @@
     "@idedoc/local-client": "^1.0.0"
   },
   "devDependencies": {
-    "@idedoc/local-api": "^1.0.0",
+    "@idedoc/local-api": "^1.0.1",
     "@types/node": "^18.15.9",
     "commander": "^10.0.0",
     "esbuild": "0.8.26",
