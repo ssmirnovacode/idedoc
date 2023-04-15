@@ -2,18 +2,26 @@
   "name": "idedoc",
   "version": "1.0.0",
   "description": "",
+  "bin": "dist/index.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "start": "tsc --watch --preserveWatchOutput"
+    "start": "tsc --watch --preserveWatchOutput",
+    "prepublishOnly": "tsc"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "commander": "^10.0.0",
-    "@idedoc/local-api": "^1.0.0",
-    "typescript": "^5.0.2"
+    "@idedoc/local-api": "^1.0.0"
   },
   "devDependencies": {
-    "@types/node": "^18.15.9"
+    "@types/node": "^18.15.9",
+    "typescript": "^5.0.2"
   }
 }
